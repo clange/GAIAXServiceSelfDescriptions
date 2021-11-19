@@ -1,0 +1,382 @@
+@prefix cc:                 <http://creativecommons.org/ns#> .
+@prefix dct:                <http://purl.org/dc/terms/> .
+@prefix gax-resource:          <http://w3id.org/gaia-x/resource#> .
+@prefix gax-contract:       <http://w3id.org/gaia-x/contract#> .
+@prefix gax-core:           <http://w3id.org/gaia-x/core#> .
+@prefix gax-node:           <http://w3id.org/gaia-x/node#> .
+@prefix gax-participant:    <http://w3id.org/gaia-x/participant#> .
+@prefix gax-service:        <http://w3id.org/gaia-x/service#> .
+@prefix owl:                <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:                <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:               <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema:             <http://schema.org/> .
+@prefix skos:               <http://www.w3.org/2004/02/skos/core#> .
+@prefix vann:               <http://purl.org/vocab/vann/> .
+@prefix voaf:               <http://purl.org/vocommons/voaf#> .
+@prefix void:               <http://rdfs.org/ns/void#> .
+@prefix xsd:                <http://www.w3.org/2001/XMLSchema#> .
+
+
+gax-core:
+    a                             voaf:Vocabulary, owl:Ontology ;
+    rdfs:label                    "GAIA-X Core Ontology"@en ;
+    dct:title                     "GAIA-X Core Ontology"@en ;
+    dct:abstract                  "The GAIA-X core ontology contains the components needed to model an efficient, competitive, secure and trustworthy federation of data infrastructure and service providers.\n\nThe different ontology modules can be found here: \n\nCore: <a href=\"https://www.w3id.org/gaia-x/core\">https://www.w3id.org/gaia-x/core</a> \n\nAsset: <a href=\"https://www.w3id.org/gaia-x/asset\">https://www.w3id.org/gaia-x/asset</a> \n\nContract: <a href=\"https://www.w3id.org/gaia-x/contract\">https://www.w3id.org/gaia-x/contract</a> \n\nNode: <a href=\"https://www.w3id.org/gaia-x/node\">https://www.w3id.org/gaia-x/node</a> \n\nParticipant: <a href=\"https://www.w3id.org/gaia-x/participant\">https://www.w3id.org/gaia-x/participant</a> \n\nService: <a href=\"https://www.w3id.org/gaia-x/service\">https://www.w3id.org/gaia-x/service</a>" ;
+    cc:license                    <http://www.apache.org/licenses/LICENSE-2.0> ;
+    dct:creator                   "GAIA-X Open Work Package 'Self-Description'" ;
+    dct:contributor               <https://github.com/jpfr>, <https://github.com/jlangkau>, <https://github.com/clange>, <https://github.com/JohannesLipp>, <https://github.com/moosmannp> ;
+    dct:created                   "2021-10-18T12:00:00+01:00"^^xsd:dateTimeStamp ;
+    dct:modified                  "2021-10-18T12:00:00+01:00"^^xsd:dateTimeStamp ;
+    owl:versionInfo               "21/09" ;
+    vann:preferredNamespaceUri    "http://w3id.org/gaia-x/core#" ;
+    vann:preferredNamespacePrefix "gax-core" ;
+    void:vocabulary               vann:, void:, voaf:, dct: ;
+.
+
+#############
+# Core Classes from the Conceptual Model
+#############
+
+gax-participant:Participant
+    a               owl:Class ;
+    rdfs:label      "Participant"@en ;
+    rdfs:comment    "A Participant is a natural or legal person who is identified, authorized and has a GAIA-X Self-Description."@en ;
+.
+
+gax-participant:Provider
+    a               owl:Class ;
+    rdfs:label      "Provider"@en ;
+    rdfs:comment    "A GAIA-X Provider is a registered legal entity, which operates Gaia-X nodes and/or provides GAIA-X services."@en ;
+    rdfs:subClassOf gax-participant:Participant ;
+    rdfs:subClassOf [ a owl:Restriction ;
+          owl:onProperty gax-participant:provides ;
+          owl:minCardinality 1 ;
+    ] ;
+    rdfs:subClassOf [ a owl:Restriction ;
+          owl:onProperty gax-core:providesResourcesFrom ;
+          owl:minCardinality 1 ;
+    ] ;
+    rdfs:subClassOf [ a owl:Restriction ;
+          owl:onProperty gax-core:operates ;
+          owl:minCardinality 1 ;
+    ] ;
+    rdfs:subClassOf [ a owl:Restriction ;
+          owl:onProperty gax-core:providesTemplate ;
+          owl:minCardinality 1 ;
+    ] ;
+    rdfs:subClassOf [ a owl:Restriction ;
+          owl:onProperty gax-core:operates ;
+          owl:minCardinality 1 ;
+    ] ;
+    rdfs:subClassOf [ a owl:Restriction ;
+          owl:onProperty gax-core:definesServiceOffering ;
+          owl:minCardinality 1 ;
+    ] ;
+.
+
+
+gax-core:Federator
+    a owl:Class ;
+    rdfs:subClassOf gax-participant:Participant ;
+    rdfs:label "Federator"@en ;
+    rdfs:comment "A Federator is a Participant who enables a Federation Service."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+          owl:onProperty gax-core:providesService ;
+          owl:minCardinality 1 ;
+    ] ;
+.
+
+gax-core:Consumer
+    a owl:Class ;
+    rdfs:subClassOf gax-participant:Participant ;
+    rdfs:label "Consumer"@en ;
+    rdfs:comment "A Participant who consumes and leverages Service Instance in the GAIA-X ecosystem to enable digital offerings for End Users."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+          owl:onProperty gax-service:consumes ;
+          owl:minCardinality 1 ;
+    ] ;
+    rdfs:subClassOf [ a owl:Restriction ;
+          owl:onProperty gax-core:offersTo ;
+          owl:minCardinality 1 ;
+    ] ;
+.
+
+gax-core:FederationService
+    a owl:Class ;
+    rdfs:label "Federation Service"@en ;
+    rdfs:comment "Federation Services provide the foundation for the operational implementation of the GAIA-X model. An Open-Source community-based reference implementation of them will be provided by the Federation Services projects under specification and oversight by GAIA-X AISBL."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+          owl:onProperty gax-core:definesSchemas ;
+          owl:minCardinality 1 ;
+    ] , gax-core:Providable ;
+.
+
+gax-service:ServiceOffering
+    a owl:Class ;
+    rdfs:label "Service Offering"@en ;
+    rdfs:comment "A Service Offering is a set of Assets and Resources, which a Provider bundles into an offering."@en ;
+.
+
+gax-resource:Resource
+    a owl:Class ;
+    rdfs:label "Resource"@en ;
+    rdfs:comment "Behavior element used by the Service Instance via the Service Offering composition."@en ;
+.
+
+gax-core:ResourceTemplate
+    a owl:Class ;
+    rdfs:label "Resource Template"@en ;
+    rdfs:comment "Resource Template."@en ;
+.
+
+#############
+# Core Classes from the Conceptual Model (without own SDs)
+#############
+
+
+gax-core:ResourceOwner
+    a owl:Class ;
+    rdfs:label "Resource Owner"@en ;
+    rdfs:comment "A natural or legal person who is in legal possession of the resource."@en ;
+    rdfs:subClassOf [ a owl:Restriction ;
+          owl:onProperty gax-core:owns ;
+          owl:minCardinality 1 ;
+    ] ;
+    rdfs:subClassOf [ a owl:Restriction ;
+          owl:onProperty gax-core:legallyEnablesResourceProvision ;
+          owl:minCardinality 1 ;
+    ] ;
+.
+
+gax-core:EndUser
+    a owl:Class ;
+    rdfs:label "End User"@en ;
+    rdfs:comment "A natural person not being Principal, using digital offering from a Consumer. End-Users own an identity within the Consumer context."@en .
+
+gax-service:ServiceInstance
+    a               owl:Class ;
+    rdfs:label      "ServiceInstance"@en ;
+    rdfs:comment    "Realisation by the Provider of the Service Offering."@e ;
+.
+
+gax-contract:Contract
+    a owl:Class ;
+    rdfs:label "Contract"@en ;
+    rdfs:comment "Contract means the binding legal agreement describing a Service Instance and includes all rights and obligations."@en ;
+.
+
+#############
+# Extended Classes from the Conceptual Model
+#############
+
+gax-core:DataResource
+    a owl:Class ;
+    rdfs:label "Data Resource"@en ;
+    rdfs:comment "A Data Resource consists of data in any form and necessary information for data sharing." ;
+    rdfs:subClassOf gax-core:Resource ;
+.
+
+gax-core:Interconnection
+    a owl:Class ;
+    rdfs:label "Interconnection"@en ;
+    rdfs:comment "An Interconnection is a Resource presenting the connection between two or more Nodes.";
+    rdfs:subClassOf gax-core:Resource ;
+.
+
+gax-node:Node
+    a owl:Class ;
+    rdfs:label "Node"@en ;
+    rdfs:comment "A Node is a Resource that represents a computational or physical entity that hosts, manipulates, or interacts with other computational or physical entities."@en ;
+    rdfs:subClassOf gax-core:Resource ;
+.
+
+gax-core:SoftwareResource
+    a owl:Class ;
+    rdfs:label "Software Asset"@en ;
+    rdfs:comment "A Software Resource is a Resource consisting of non-physical functions." ;
+    rdfs:subClassOf gax-core:Resource ;
+.
+
+#############
+# Properties
+#############
+
+gax-core:providesResourcesFrom
+    a            owl:ObjectProperty ;
+    rdfs:label   "provides resources from"@en ;
+    rdfs:domain  gax-participant:Provider ;
+    rdfs:range   gax-core:ResourceOwner .
+
+gax-core:legallyEnablesResourceProvision
+    a            owl:ObjectProperty ;
+    rdfs:label   "legally enables resource provision"@en ;
+    rdfs:domain  gax-core:ResourceOwner ;
+    rdfs:range   gax-participant:Provider .
+
+gax-core:owns
+    a            owl:ObjectProperty ;
+    rdfs:label   "owns"@en ;
+    rdfs:domain  gax-core:ResourceOwner ;
+    rdfs:range   gax-resource:Resource .
+
+gax-core:operates
+    a            owl:ObjectProperty ;
+    rdfs:label   "operates"@en ;
+    rdfs:domain  [ owl:unionOf (gax-participant:Provider gax-service:ServiceInstance)] ;
+    rdfs:range   gax-core:Resource .
+
+gax-participant:provides
+    a                owl:ObjectProperty ;
+    rdfs:label       "provides"@en ;
+    rdfs:domain      gax-participant:Provider ;
+    rdfs:range       gax-core:Providable ;
+.
+
+gax-core:providesTemplate
+    a                owl:ObjectProperty ;
+    rdfs:label       "provides template"@en ;
+    rdfs:domain      gax-participant:Provider ;
+    rdfs:range       gax-core:ResourceTemplate ;
+.
+
+gax-core:providesService
+    a                owl:ObjectProperty ;
+    rdfs:label       "provides service"@en ;
+    rdfs:domain      gax-core:Federator ;
+    rdfs:range       gax-core:FederationService ;
+.
+
+gax-core:definesServiceOffering
+    a            owl:ObjectProperty ;
+    rdfs:label   "defines service offering"@en ;
+    rdfs:domain  gax-participant:Provider ;
+    rdfs:range   gax-core:ServiceOffering .
+
+gax-core:usesAndConforms
+    a            owl:ObjectProperty ;
+    rdfs:label   "uses and conforms"@en ;
+    rdfs:domain  gax-core:ServiceOffering ;
+    rdfs:range   gax-core:FederationService .
+
+gax-core:conforms
+    a            owl:ObjectProperty ;
+    rdfs:label   "conforms"@en ;
+    rdfs:domain  gax-service:ServiceInstance ;
+    rdfs:range   gax-core:ServiceOffering .
+
+gax-core:composes
+    a            owl:ObjectProperty ;
+    rdfs:label   "composes"@en ;
+    rdfs:domain  gax-core:ServiceOffering ;
+    rdfs:range   gax-core:Composable  .
+
+gax-core:resourceDependsOn
+    a            owl:ObjectProperty ;
+    rdfs:label   "resource depends on"@en ;
+    rdfs:domain  gax-service:ServiceInstance ;
+    rdfs:range   gax-core:ServiceOffering  .
+
+gax-core:serviceOfferingDependsOn
+    a            owl:ObjectProperty ;
+    rdfs:label   "service offering depends on"@en ;
+    rdfs:domain  gax-core:ServiceOffering ;
+    rdfs:range   gax-core:ServiceOffering  .
+
+gax-core:realizedBy
+    a            owl:ObjectProperty ;
+    rdfs:label   "realized by"@en ;
+    rdfs:domain  gax-core:ServiceOffering ;
+    rdfs:range   gax-service:ServiceInstance .
+
+gax-core:offersTo
+    a            owl:ObjectProperty ;
+    rdfs:label   "offers to"@en ;
+    rdfs:domain  gax-core:Consumer ;
+    rdfs:range   gax-core:EndUser .
+
+gax-core:usesDigitalOfferingBy
+    a            owl:ObjectProperty ;
+    rdfs:label   "uses digital offering by"@en ;
+    rdfs:domain  gax-core:EndUser ;
+    rdfs:range   gax-core:Consumer .
+
+gax-service:consumes
+    a               owl:ObjectProperty ;
+    rdfs:label      "consumes"@en ;
+    rdfs:domain     [ owl:unionOf (gax-service:Service gax-core:Consumer)] ;
+    rdfs:range      gax-core:Consumable ;
+.
+
+gax-core:uses
+    a            owl:ObjectProperty ;
+    rdfs:label   "uses"@en ;
+    rdfs:domain  gax-core:EndUser ;
+    rdfs:range   gax-service:ServiceInstance .
+
+gax-core:reliesOn
+    a            owl:ObjectProperty ;
+    rdfs:label   "relies on"@en ;
+    rdfs:domain  gax-service:ServiceInstance ;
+    rdfs:range   gax-contract:Contract .
+
+gax-core:managedBy
+    a                   owl:ObjectProperty  ;
+    rdfs:label          "managed by"@en ;
+    rdfs:comment        "Declares a GAIA-X participant that manages / maintains this asset."@en ;
+    skos:note           "Should be used to link GAIA-X asset to their respective Participant, as they cannot exist without one."@en ;
+    rdfs:domain         gax-resource:Resource ;
+    rdfs:range          gax-participant:Participant .
+
+gax-core:providedBy
+    a            owl:ObjectProperty ;
+    rdfs:label   "provided by"@en ;
+    rdfs:domain   [ owl:unionOf (gax-node:Node gax-service:Service)] ;
+    rdfs:range   gax-participant:Provider .
+
+gax-core:ownedBy
+    a            owl:ObjectProperty ;
+    rdfs:label   "owned by"@en ;
+    rdfs:range   gax-participant:Participant .
+
+#################
+# Meta Ontology #
+#################
+
+gax-core:MustCriterion
+    rdfs:subClassOf rdf:Property ;
+    rdfs:label      "must criterion"@en ;
+    rdfs:comment    "a property for which a value must be provided"@en ;
+.
+
+gax-core:OverridableCriterion
+    rdfs:subClassOf rdf:Property ;
+    rdfs:label      "overridable criterion"@en ;
+    rdfs:comment    "a property whose value can be inherited, but may be overridden"@en ;
+.
+
+gax-core:HiddenCriterion
+    rdfs:subClassOf rdf:Property ;
+    rdfs:label      "hidden criterion"@en ;
+    rdfs:comment    "a property that should be hidden when generating visualizations of an entity"@en ;
+.
+
+gax-core:Providable
+    a                   owl:Class ;
+    rdfs:label          "Providable" ;
+    rdfs:comment        "A class that can be provided." .
+
+gax-core:Composable
+    a                   owl:Class ;
+    rdfs:label          "Composable" ;
+    rdfs:comment        "A class that can be composed." .
+
+gax-core:Controllable
+    a                   owl:Class ;
+    rdfs:label          "Controllable" ;
+    rdfs:comment        "A class that can be controlled." .
+
+gax-core:Consumable
+    a                   owl:Class ;
+    rdfs:label          "Consumable" ;
+    rdfs:comment        "A class that can be consumed." .
+

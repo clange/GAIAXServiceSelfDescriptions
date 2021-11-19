@@ -1,0 +1,408 @@
+@prefix cc:         <http://creativecommons.org/ns#> .
+@prefix dct:        <http://purl.org/dc/terms/> .
+@prefix owl:        <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:        <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:       <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix gax-resource:  <http://w3id.org/gaia-x/resource#> .
+@prefix gax-contract:  <http://w3id.org/gaia-x/contract#> .
+@prefix gax-core:   <http://w3id.org/gaia-x/core#> .
+@prefix dcat:       <http://www.w3.org/ns/dcat#> .
+@prefix xsd:        <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct:        <http://purl.org/dc/terms/> .
+@prefix ids:        <https://w3id.org/idsa/core/> .
+@prefix void:       <http://rdfs.org/ns/void#> .
+@prefix vann:       <http://purl.org/vocab/vann/> .
+@prefix vcard:      <http://www.w3.org/2006/vcard/ns#> .
+@prefix voaf:       <http://purl.org/vocommons/voaf#> .
+@prefix skos:       <http://www.w3.org/2004/02/skos/core#> .
+
+
+gax-resource:
+    a                             voaf:Vocabulary, owl:Ontology ;
+    rdfs:label                    "GAIA-X Resource Ontology"@en ;
+    dct:title                     "GAIA-X Resource Ontology"@en ;
+    dct:abstract                  "The GAIA-X asset ontology contains the components needed to model a resource in the GAIA-X architecture.\n\nThe different ontology modules can be found here: \n\nCore: <a href=\"https://www.w3id.org/gaia-x/core\">https://www.w3id.org/gaia-x/core</a> \n\nResource: <a href=\"https://www.w3id.org/gaia-x/resource\">https://www.w3id.org/gaia-x/resource</a> \n\nContract: <a href=\"https://www.w3id.org/gaia-x/contract\">https://www.w3id.org/gaia-x/contract</a> \n\nNode: <a href=\"https://www.w3id.org/gaia-x/node\">https://www.w3id.org/gaia-x/node</a> \n\nParticipant: <a href=\"https://www.w3id.org/gaia-x/participant\">https://www.w3id.org/gaia-x/participant</a> \n\nService: <a href=\"https://www.w3id.org/gaia-x/service\">https://www.w3id.org/gaia-x/service</a>" ;
+    cc:license                    <http://www.apache.org/licenses/LICENSE-2.0> ;
+    dct:creator                   "GAIA-X Open Work Package 'Self-Description'" ;
+    dct:contributor               <https://github.com/jpfr>, <https://github.com/jlangkau>, <https://github.com/clange>, <https://github.com/JohannesLipp>, <https://github.com/moosmannp> ;
+    dct:created                   "2021-10-18T12:00:00+01:00"^^xsd:dateTimeStamp ;
+    dct:modified                  "2021-10-18T12:00:00+01:00"^^xsd:dateTimeStamp ;
+    owl:versionInfo               "21/09" ;
+    vann:preferredNamespaceUri    "http://w3id.org/gaia-x/asset#" ;
+    vann:preferredNamespacePrefix "gax-resource" ;
+    void:vocabulary               vann:, void:, voaf:, dct: ;
+.
+
+
+# TODO: architecture called it also "Managed Element". Do we have to fit this terminology, also?
+
+gax-resource:Resource
+    a          owl:Class ;
+    rdfs:label "Resource" ;
+    rdfs:comment "Resources describe in general the goods and objects of a Gaia-X Ecosystem. A Resource can be a Data Resource, a Software Resource, a Node or an Interconnection."@en ;
+    rdfs:subClassOf dcat:Resource, gax-core:Composable ;
+.
+
+gax-resource:DataResource
+    a          owl:Class ;
+    rdfs:label "Data Resource"@en ;
+    rdfs:comment "A Data Resource consists of data in any form and necessary information for data sharing." ;
+    rdfs:subClassOf gax-resource:Resource, dcat:Dataset;
+.
+
+gax-resource:SoftwareResource
+    a          owl:Class ;
+    rdfs:label "Software Resource"@en ;
+    rdfs:comment "A Software Resource is a Resource consisting of non-physical functions." ;
+    rdfs:subClassOf gax-resource:Resource;
+.
+
+gax-resource:Interconnection
+    a          owl:Class ;
+    rdfs:label "Interconnection"@en ;
+    rdfs:comment "An Interconnection is a Resource presenting the connection between two or more Nodes." ;
+    rdfs:subClassOf gax-resource:Resource;
+.
+
+gax-resource:temporalCoverage
+    a owl:ObjectProperty ;
+    rdfs:domain gax-resource:DataResource ;
+    rdfs:range ids:TemporalEntity ;
+    rdfs:label "temporal coverage"@en ;
+    rdfs:comment "Temporal period or instance covered by the contents of the asset."@en ;
+.
+
+gax-resource:spatialCoverage
+    a owl:ObjectProperty ;
+    rdfs:domain gax-resource:DataResource ;
+    rdfs:range ids:Location ;
+    rdfs:label "spatial coverage"@en ;
+    rdfs:comment "The geographical area covered by the contents of the data asset."@en ;
+.
+
+gax-resource:publisher
+    a owl:ObjectProperty ;
+    rdfs:domain gax-resource:DataResource ;
+    rdfs:range gax-core:Participant ;
+    rdfs:label "publisher"@en ;
+    rdfs:comment "The publisher (a gax-resource:Participant) of the data asset. The owner, creator and publisher of an asset may differ."@en ;
+.
+
+gax-resource:creator
+    a owl:ObjectProperty ;
+    rdfs:domain gax-resource:DataResource ;
+    rdfs:range vcard:Agent ;
+    rdfs:label "creator"@en ;
+    rdfs:comment "Creator of the data asset. The owner, creator and publisher of an asset may differ."@en ;
+.
+
+gax-resource:owner
+    a owl:ObjectProperty ;
+    rdfs:domain gax-resource:DataResource ;
+    rdfs:range vcard:Agent ;
+    rdfs:label "owner"@en ;
+    rdfs:comment "Owner of the data asset. The owner, creator and publisher of an asset may differ."@en ;
+.
+
+gax-resource:distribution
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf dcat:distribution ;
+    rdfs:domain gax-resource:DataResource ;
+    rdfs:range gax-resource:Distribution ;
+    rdfs:label "distribution"@en ;
+    rdfs:comment "An available distribution of a gax-resource:DataResource. A gax-resource:DataResource might be available in multiple distributions."@en ;
+.
+
+gax-resource:sample
+    a owl:ObjectProperty ;
+    rdfs:domain gax-resource:DataResource ;
+    rdfs:range gax-resource:DataResource ;
+    rdfs:label "sample"@en ;
+    rdfs:comment "Sample of the offered Data Asset. The sample itself is a Data Asset and allows but not necessary requires all fields of the gax-resource:DataResource"@en ;
+.
+
+gax-resource:contractOffer
+    a owl:ObjectProperty ;
+    rdfs:domain gax-resource:DataResource ;
+    rdfs:range gax-contract:ContractOffer ;
+    rdfs:label "contract offer"@en ;
+    rdfs:comment "A contract offer for the corresponding data asset."@en ;
+.
+
+gax-resource:containsPersonalData
+    a owl:DatatypeProperty  ;
+    rdfs:domain gax-resource:DataResource ;
+    rdfs:range xsd:boolean  ;
+    rdfs:label "contains personal data"@en ;
+    rdfs:comment "Indicates whether the data asset contains personal data."@en ;
+.
+
+gax-resource:consent
+    a owl:DatatypeProperty  ;
+    rdfs:domain gax-resource:DataResource ;
+    rdfs:range xsd:boolean  ;
+    rdfs:label "consent"@en ;
+    rdfs:comment "Indicates wether the consent to process / distribute the data is given (GDPR requierment)."@en ;
+.
+
+ids:TemporalEntity a owl:Class .
+ids:Location a owl:Class .
+vcard:Agent a owl:Class .
+
+gax-resource:PhysicalMediumResource
+    a owl:Class ;
+    rdfs:label "physical medium resource"@en ;
+.
+
+gax-resource:hasPhysicalMediumResource
+    a owl:ObjectProperty ;
+    rdfs:domain gax-resource:Interconnection;
+    rdfs:range  gax-resource:PhysicalMediumResource ;
+    rdfs:label "has physical medium resource"@en ;
+.
+
+gax-resource:hasPhysicalMediumResourceLocation
+    a owl:DatatypeProperty  ;
+    rdfs:domain gax-resource:PhysicalMediumResource ;
+    rdfs:range      [
+                        rdf:type    rdfs:Datatype ;
+                        owl:unionOf (
+                                        xsd:string
+                                        dct:Location
+                                    )
+                    ] ;
+    rdfs:label "has physical medium resource location"@en ;
+    rdfs:comment "Reference to the specific location, pointer or means to resolve the location of one of the physical medium resource of the interconnection. E.g., Point of Presence, Wide Area, Facility."@en ;
+.
+
+gax-resource:hasPhysicalMediumResourceType
+    a owl:DatatypeProperty  ;
+    rdfs:domain gax-resource:PhysicalMediumResource ;
+    rdfs:range xsd:string ;
+    rdfs:label "has physical medium asset type"@en ;
+    rdfs:comment "Describes the type of technology used for physical connection."@en ;
+.
+
+gax-resource:ConnectionResource
+    a owl:Class  ;
+    rdfs:label "connection resource"@en ;
+.
+
+gax-resource:hasConnectionResource
+    a owl:DatatypeProperty  ;
+    rdfs:domain gax-resource:Interconnection ;
+    rdfs:range gax-resource:ConnectionResource  ;
+    rdfs:label "has connection resource"@en ;
+.
+
+gax-resource:hasConnectionPointA
+    a owl:DatatypeProperty ;
+    rdfs:domain gax-resource:ConnectionResource ;
+    rdfs:range xsd:string ;
+    rdfs:label "has connection point A"@en ;
+    rdfs:comment "Source reference ID. Dependend on the choice of the provider, it can be a mac address, a vlan ID etc."@en ;
+.
+
+gax-resource:hasConnectionPointZ
+    a owl:DatatypeProperty ;
+    rdfs:domain gax-resource:ConnectionResource ;
+    rdfs:range xsd:string ;
+    rdfs:label "has destination connection point Z"@en ;
+    rdfs:comment "Destination reference ID. Dependend on the choice of the provider, it can be a mac address, a vlan ID etc."@en ;
+.
+
+gax-resource:hasBandwith
+    a owl:DatatypeProperty ;
+    rdfs:domain gax-resource:ConnectionResource ;
+    rdfs:range xsd:float ;
+    rdfs:label "has bandwidth"@en ;
+    rdfs:comment "The bandwidth is defined in SLA agreement. E.g., 1, 10,100, 400 Gbps."@en ;
+.
+
+gax-resource:hasLatency
+    a owl:DatatypeProperty ;
+    rdfs:domain gax-resource:ConnectionResource ;
+    rdfs:range      [
+                        rdf:type    rdfs:Datatype ;
+                        owl:unionOf (
+                                        xsd:string
+                                        xsd:float
+                                    )
+                    ] ;
+    rdfs:label "has latency"@en ;
+    rdfs:comment "Contractual latency defined in SLA agreement, if not specified then assigned the value of best-effort. E.g., 1s, 10 ms, best-effort."@en ;
+.
+
+gax-resource:hasPacketLoss
+    a owl:DatatypeProperty ;
+    rdfs:domain gax-resource:ConnectionResource ;
+    rdfs:range      [
+                        rdf:type    rdfs:Datatype ;
+                        owl:unionOf (
+                                        xsd:string
+                                        xsd:float
+                                    )
+                    ] ;
+    rdfs:label "has packet loss"@en ;
+    rdfs:comment "Contractual packet loss defined in SLA agreement, if not specified then assigned the value of best-effort. E.g., 1%, 10%, best-effort."@en ;
+.
+
+gax-resource:supportsProtocol
+    a owl:DatatypeProperty ;
+    rdfs:domain gax-resource:ConnectionResource ;
+    rdfs:range xsd:string ;
+    rdfs:label "supports protocol"@en ;
+    rdfs:comment "Supported protocols among used layers should be specified, if not please add value None. E.g., TCP, IP, HTTPS, None."@en ;
+.
+
+gax-resource:hasAvailability
+    a owl:DatatypeProperty ;
+    rdfs:domain gax-resource:ConnectionResource ;
+    rdfs:range xsd:string ;
+    rdfs:label "has availability"@en ;
+    rdfs:comment "Important QoS attribute to ensure availability of proposed services. E.g., 90%, 99%."@en ;
+.
+
+gax-resource:RouteResource
+    a          owl:Class ;
+    rdfs:label "route resource"@en ;
+.
+
+gax-resource:hasRouteResource
+    a owl:ObjectProperty  ;
+    rdfs:domain gax-resource:Interconnection ;
+    rdfs:range gax-resource:RouteResource  ;
+    rdfs:label "has route resource"@en ;
+.
+
+gax-resource:hasConnectedNetwork
+    a owl:DatatypeProperty  ;
+    rdfs:domain gax-resource:RouteResource ;
+    rdfs:range xsd:integer  ;
+    rdfs:label "has connected network"@en ;
+    rdfs:comment "Autonomous system (AS) number (ASN) should be provided. E.g., 200, 714."@en ;
+.
+
+gax-resource:hasRouteResourceProtocol
+    a owl:DatatypeProperty  ;
+    rdfs:domain gax-resource:RouteResource ;
+    rdfs:range xsd:string  ;
+    rdfs:label "has route resource protocol"@en ;
+    rdfs:comment "Supported protocols. E.g., TCP, IP, None."@en ;
+.
+
+gax-resource:hasOriginNode
+    a owl:DatatypeProperty  ;
+    rdfs:domain gax-resource:RouteResource ;
+    rdfs:range xsd:string  ;
+    rdfs:label "has origin node"@en ;
+    rdfs:comment "Reference to connection resource. E.g., Node 1,2,3."@en ;
+.
+
+gax-resource:title
+    a owl:DatatypeProperty ;
+    rdfs:subPropertyOf dct:title ;
+    rdfs:domain gax-resource:Resource ;
+    rdfs:range xsd:string ;
+    rdfs:label "title"@en ;
+    rdfs:comment "A title given to a resource."@en ;
+.
+
+gax-resource:description
+    a owl:DatatypeProperty ;
+    rdfs:subPropertyOf dct:description ;
+    rdfs:domain gax-resource:Resource ;
+    rdfs:range xsd:string ;
+    rdfs:label "description"@en ;
+    rdfs:comment "Explanation of the resource in a natural language text."@en ;
+.
+
+gax-resource:keyword
+    a owl:DatatypeProperty ;
+    rdfs:subPropertyOf dcat:keyword ;
+    rdfs:domain gax-resource:Resource ;
+    rdfs:range xsd:string ;
+    rdfs:label "keyword"@en ;
+    rdfs:comment "Keywords or tags describing the resource."@en ;
+.
+
+gax-resource:theme
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf dcat:theme ;
+    rdfs:domain gax-resource:Resource ;
+    rdfs:range skos:Concept ;
+    rdfs:label "theme/category"@en ;
+    rdfs:comment "A knowledge organization system used to classify the resource."@en ;
+    rdfs:seeAlso <http://www.w3.org/TR/skos-reference> ;
+.
+
+gax-resource:language
+    a owl:ObjectProperty ;
+    rdfs:subPropertyOf dct:language ;
+    rdfs:domain gax-resource:Resource ;
+    rdfs:range dct:LinguisticSystem ;
+    rdfs:label "language"@en ;
+    rdfs:comment "Reference to the language(s) of the resource. The use of a vocabulary such as the Library of Congress language definitions (ISO 639-1 or ISO 639-2) is advised."@en ;
+    rdfs:seeAlso <https://www.omg.org/spec/LCC>, <http://id.loc.gov/vocabulary/iso639-1>, <http://id.loc.gov/vocabulary/iso639-2>;
+.
+
+gax-resource:license
+    a owl:DatatypeProperty ;
+    rdfs:subPropertyOf dct:license ;
+    rdfs:domain gax-resource:Resource ;
+    rdfs:range dct:LicenseDocument ;
+    rdfs:seeAlso <https://www.wikidata.org/wiki/Q79719>;
+    rdfs:label "license"@en ;
+    rdfs:comment """Reference to a well-known document regulating the general usage of the Resource.
+    Check wikidata license documentation for an extensive list of licenses.
+    License IRI should refer to the direct of link for a given license,
+    e.g., MIT license (https://www.wikidata.org/wiki/Q334661). The label of the resolved wikidata license IRI can be used to
+    present the license in human-readable form."""@en;
+.
+
+gax-resource:issued
+    a owl:DatatypeProperty  ;
+    rdfs:domain gax-resource:Resource ;
+    rdfs:range xsd:dateTimeStamp  ;
+    rdfs:label "issued"@en ;
+    rdfs:comment "Date of formal issuance (e.g., publication)."@en ;
+.
+
+gax-resource:modified
+    a owl:DatatypeProperty  ;
+    rdfs:domain gax-resource:Resource  ;
+    rdfs:range xsd:dateTimeStamp  ;
+    rdfs:label "modified"@en ;
+    rdfs:comment "Most recent date on which the resource entry was changed, updated or modified."@en ;
+.
+
+skos:Concept a owl:Class .
+dct:LinguisticSystem a owl:Class .
+dct:LicenseDocument a owl:Class .
+
+gax-resource:Measure
+    a          owl:Class ;
+    rdfs:label "Measure"@en ;
+    rdfs:comment "A measure is a compound of a numeric value and a unit of measurement. A measure is typically not given an identifier and reused in multiple places, but written down locally, as the value of a single attribute." ;
+.
+
+gax-resource:hasValue
+    a owl:DatatypeProperty ;
+    rdfs:label "has value" ;
+    rdfs:domain gax-resource:Measure ;
+    rdfs:range xsd:float ;
+.
+
+gax-resource:hasUnit
+    a owl:DatatypeProperty ;
+    rdfs:label "has unit" ;
+    rdfs:domain gax-resource:Measure ;
+    rdfs:range      [
+                        rdf:type    rdfs:Datatype ;
+                        owl:unionOf (
+                                        xsd:string
+                                        xsd:anyURI
+                                    )
+                    ] ;
+.
+

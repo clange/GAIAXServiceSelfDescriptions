@@ -1,0 +1,70 @@
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix gax-core:  <http://w3id.org/gaia-x/core#> .
+@prefix gax-participant:  <http://w3id.org/gaia-x/participant#> .
+@prefix vcard: <https://www.w3.org/2006/vcard/ns#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix schema:         <http://schema.org/> .
+
+gax-participant:MinimumParticipantShape
+  a              sh:NodeShape ;
+  sh:targetClass gax-participant:Participant ;
+  sh:property    [ sh:path     gax-participant:hasLegallyBindingName ;
+                   sh:minCount 1 ;
+                   sh:maxCount 1 ;
+                   sh:datatype xsd:string ] ;
+  sh:property    [ sh:path     gax-participant:hasLegallyBindingAddress ;
+                   sh:minCount 1 ;
+                   sh:maxCount 1 ;
+                   sh:class    vcard:Address ] ;
+.
+
+gax-participant:MinimumProviderShape
+  a              sh:NodeShape ;
+  sh:targetClass gax-participant:Provider ;
+  sh:property    [ sh:path     gax-participant:hasLegallyBindingName ;
+                   sh:minCount 1 ;
+                   sh:maxCount 1 ;
+                   sh:datatype xsd:string ] ;
+  sh:property    [ sh:path     gax-participant:hasLegallyBindingAddress ;
+                   sh:minCount 1 ;
+                   sh:maxCount 1 ;
+                   sh:class    vcard:Address ] ;
+  sh:property    [ sh:path     gax-participant:hasLegalForm ;
+                   sh:minCount 1 ;
+                   sh:maxCount 1 ;
+                   sh:or ( [ sh:datatype xsd:string ] [ sh:datatype xsd:anyURI ] ) ] ;
+  sh:property    [ sh:path     gax-participant:hasJurisdiction ;
+                   sh:minCount 1 ;
+                   sh:maxCount 1 ;
+                   sh:or ( [ sh:datatype xsd:string ] [ sh:datatype xsd:anyURI ] ) ] ;
+  sh:property    [ sh:path     gax-participant:hasSalesTaxID ;
+                   sh:minCount 1 ;
+                   sh:maxCount 1 ;
+                   sh:datatype xsd:string ] ;
+  sh:property    [ sh:path     gax-participant:hasLegalRegistrationNumber ;
+                   sh:minCount 1 ;
+                   sh:maxCount 1 ;
+                   sh:datatype xsd:string ] ;
+  sh:property    [ sh:path     gax-participant:hasWebAddress ;
+                   sh:minCount 1 ;
+                   sh:datatype xsd:anyURI ] ;
+  sh:property    [ sh:path     gax-participant:hasIndividualContactLegal ;
+                   sh:minCount 1 ;
+                   sh:or ( [ sh:class vcard:Agent ] [ sh:class schema:Person ] ) ] ;
+  sh:property    [ sh:path     gax-participant:hasIndividualContactTechnical ;
+                   sh:minCount 1 ;
+                   sh:or ( [ sh:class vcard:Agent ] [ sh:class schema:Person ] ) ] ;
+.
+
+gax-participant:MeasureShape
+    a sh:NodeShape ;
+    sh:targetClass gax-core:Measure ;
+    sh:property         [ sh:path     gax-core:hasValue ;
+                          sh:minCount 1;
+                          sh:maxCount 1;
+                          sh:datatype xsd:float  ]  ;
+    sh:property         [ sh:path     gax-core:hasUnit ;
+                          sh:minCount 1;
+                          sh:maxCount 1;
+                          sh:or ( [ sh:datatype xsd:string ] [ sh:nodeKind sh:IRI ] ) ] ;
+.

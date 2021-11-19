@@ -1,0 +1,65 @@
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix gax-core:  <http://w3id.org/gaia-x/core#> .
+@prefix gax-resource: <http://w3id.org/gaia-x/resource#> .
+@prefix gax-contract: <http://w3id.org/gaia-x/contract#> .
+@prefix gax-participant: <http://w3id.org/gaia-x/participant#> .
+@prefix vcard: <https://www.w3.org/2006/vcard/ns#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix ids: <https://w3id.org/idsa/core/> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+@prefix skos: <http://www.w3.org/2004/02/skos/core#> .
+
+gax-resource:ResourceShape
+    a sh:NodeShape ;
+    sh:targetClass gax-resource:Resource ;
+    sh:property    [ sh:path     gax-core:title ;
+                   sh:datatype xsd:string ] ;
+    sh:property    [ sh:path     gax-core:description ;
+                     sh:datatype xsd:string ] ;
+    sh:property    [ sh:path     gax-core:keyword ;
+                     sh:datatype xsd:string ] ;
+    sh:property    [ sh:path     gax-core:theme ;
+                     sh:class    skos:Concept ] ;
+    sh:property    [ sh:path     gax-core:language ;
+                     sh:class    dct:LinguisticSystem ] ;
+    sh:property    [ sh:path     gax-core:license ;
+                     sh:class    dct:LicenseDocument ] ;
+    sh:property    [ sh:path     gax-core:issued  ;
+                     sh:datatype xsd:dateTimeStamp ] ;
+    sh:property    [ sh:path     gax-core:modified ;
+                     sh:datatype xsd:dateTimeStamp ] ;
+.
+
+gax-resource:DataResourceShape
+    a sh:NodeShape ;
+    sh:targetClass gax-resource:DataResource ;
+
+    sh:property         [ sh:path     gax-resource:temporalCoverage ;
+                          sh:class    ids:TemporalEntity ];
+    sh:property         [ sh:path     gax-resource:spatialCoverage  ;
+                          sh:class    ids:Location ];
+    sh:property         [ sh:path     gax-resource:publisher ;
+                          sh:class    gax-participant:Participant ];
+    sh:property         [ sh:path     gax-resource:creator  ;
+                          sh:class    vcard:Agent ];
+    sh:property         [ sh:path     gax-resource:owner  ;
+                          sh:class    vcard:Agent ];
+    sh:property         [ sh:path     gax-resource:distribution ;
+                          sh:class    dcat:Distribution ];
+    sh:property         [ sh:path     gax-resource:sample ;
+                          sh:class    dcat:Distribution ];
+    sh:property         [ sh:path     gax-resource:contractOffer ;
+                          sh:class    gax-contract:ContractOffer ];
+
+    # If gax:containsPersonalData is set to true, gax:consent must have a valid boolean value.
+    sh:xone (           [ sh:property [ sh:path gax-resource:containsPersonalData;
+                                        sh:hasValue true ];
+                          sh:property [ sh:path gax-resource:consent ;
+                                        sh:datatype xsd:boolean ]; ]
+
+                        [ sh:property [ sh:path gax-resource:containsPersonalData; ;
+                                        sh:hasValue false ];
+                          sh:property [ sh:path gax-resource:consent ;
+                                        sh:datatype xsd:boolean]; ] );
+.
