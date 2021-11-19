@@ -1,0 +1,123 @@
+@prefix dct:                <http://purl.org/dc/terms/> .
+@prefix foaf:               <http://xmlns.com/foaf/0.1/> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix gax-resource:  <http://w3id.org/gaia-x/resource#> .
+@prefix gax-core:  <http://w3id.org/gaia-x/core#> .
+@prefix gax-node:  <http://w3id.org/gaia-x/node#> .
+@prefix gax-participant:  <http://w3id.org/gaia-x/participant#> .
+@prefix gax-service:  <http://w3id.org/gaia-x/service#> .
+@prefix rdfs:               <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+gax-resource:MinimumAssetShape
+  a              sh:NodeShape ;
+  sh:targetClass gax-resource:Resource ;
+  sh:property    [ sh:path     gax-core:hasName ;
+                   sh:minCount 1 ;
+                   sh:maxCount 1 ;
+                   sh:datatype xsd:string ] ;
+  sh:property    [ sh:path     dct:description ;
+                   sh:minCount 1 ;
+                   sh:maxCount 1 ;
+                   sh:datatype rdfs:Literal ] ;
+  sh:property    [ sh:path     gax-core:ownedBy ;
+                   sh:minCount 1 ;
+                   sh:datatype foaf:Person ] ;
+  sh:property    [ sh:path     gax-core:hasLocation ;
+                   sh:minCount 1 ;
+                   sh:maxCount 1 ;
+                   sh:datatype dct:Location ] ;
+  sh:property    [ sh:path     gax-core:hasJurisdiction ;
+                   sh:minCount 1 ;
+                   sh:maxCount 1 ;
+                   sh:datatype dct:Location ] ;
+  sh:property    [ sh:path     gax-service:hasProvider ;
+                   sh:minCount 1 ;
+                   sh:datatype gax-participant:Participant ] ;
+.
+
+gax-resource:InterconnectionShape
+  a              sh:NodeShape ;
+  sh:targetClass gax-resource:Interconnection ;
+  sh:property    [ sh:path     gax-resource:hasConnectedNode ;
+                   sh:minCount 2 ;
+                   sh:datatype gax-node:Node ] ;
+.
+
+gax-resource:PhysicalMediumResourceShape
+    a sh:NodeShape ;
+    sh:targetClass gax-resource:PhysicalMediumResource ;
+    sh:property         [ sh:path     gax-resource:hasPhysicalMediumResourceLocation ;
+                          sh:minCount 2 ;
+                          sh:maxCount 2 ;
+                          sh:or ( [ sh:maxLength 100; sh:datatype xsd:string ] [ sh:class dct:Location ] ) ] ;
+    sh:property         [ sh:path     gax-resource:hasPhysicalMediumResourceType ;
+                          sh:minCount 1 ;
+                          sh:maxCount 1 ;
+                          sh:maxLength 50;
+                          sh:datatype xsd:string ] ;
+.
+
+gax-resource:ConnectionResourceShape
+    a sh:NodeShape ;
+    sh:targetClass gax-resource:ConnectionResource ;
+    sh:property         [ sh:path gax-resource:hasConnectionPointA ;
+                          sh:minCount 1;
+                          sh:maxCount 1;
+                          sh:maxLength 1;
+                          sh:datatype xsd:string  ] ;
+    sh:property         [ sh:path     gax-resource:hasConnectionPointZ ;
+                          sh:minCount 1;
+                          sh:maxCount 1;
+                          sh:maxLength 1;
+                          sh:datatype xsd:string  ]  ;
+    sh:property         [ sh:path     gax-resource:hasBandwith ;
+                          sh:minCount 1 ;
+                          sh:maxCount 1 ;
+                          sh:datatype    xsd:float ];
+    sh:property         [ sh:path     gax-resource:hasLatency ;
+                          sh:minCount 1 ;
+                          sh:maxCount 1 ;
+                          sh:or ( [ sh:datatype xsd:string ] [ sh:datatype xsd:float ] ) ] ;
+    sh:property         [ sh:path     gax-resource:hasPacketLoss ;
+                          sh:minCount 1 ;
+                          sh:maxCount 1 ;
+                          sh:or ( [ sh:datatype xsd:string ] [ sh:datatype xsd:float ] ) ] ;
+    sh:property         [ sh:path     gax-resource:supportsProtocol ;
+                          sh:minCount 1 ;
+                          sh:maxCount 1 ;
+                          sh:datatype    xsd:string ];
+    sh:property         [ sh:path     gax-resource:hasAvailability ;
+                          sh:minCount 1 ;
+                          sh:maxCount 1 ;
+                          sh:datatype    xsd:string ];
+.
+
+gax-resource:MeasureShape
+    a sh:NodeShape ;
+    sh:targetClass gax-core:Measure ;
+    sh:property         [ sh:path     gax-core:hasValue ;
+                          sh:minCount 1;
+                          sh:maxCount 1;
+                          sh:datatype xsd:float  ]  ;
+    sh:property         [ sh:path     gax-core:hasUnit ;
+                          sh:minCount 1;
+                          sh:maxCount 1;
+                          sh:or ( [ sh:datatype xsd:string ] [ sh:nodeKind sh:IRI ] ) ] ;
+.
+
+gax-resource:RouteResourceShape
+    a sh:NodeShape ;
+    sh:targetClass gax-resource:RouteResource ;
+    sh:property         [ sh:path     gax-resource:hasConnectedNetwork ;
+                          sh:minCount 1;
+                          sh:maxCount 1;
+                          sh:datatype xsd:integer ] ;
+    sh:property         [ sh:path     gax-resource:hasRouteResourceProtocol ;
+                          sh:minCount 1;
+                          sh:datatype xsd:string ] ;
+    sh:property         [ sh:path     gax-resource:hasOriginNode ;
+                          sh:minCount 1;
+                          sh:maxCount 1;
+                          sh:datatype xsd:string ] ;
+.

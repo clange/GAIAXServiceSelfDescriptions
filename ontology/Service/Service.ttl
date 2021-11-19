@@ -1,0 +1,472 @@
+@prefix cc:             <http://creativecommons.org/ns#> .
+@prefix dct:            <http://purl.org/dc/terms/> .
+@prefix gax-resource:      <http://w3id.org/gaia-x/resource#> .
+@prefix gax-core:       <http://w3id.org/gaia-x/core#> .
+@prefix gax-service:    <http://w3id.org/gaia-x/service#> .
+@prefix gax-participant:    <http://w3id.org/gaia-x/participant#> .
+@prefix owl:            <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:            <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:           <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema:         <http://schema.org/> .
+@prefix vann:           <http://purl.org/vocab/vann/> .
+@prefix voaf:           <http://purl.org/vocommons/voaf#> .
+@prefix void:           <http://rdfs.org/ns/void#> .
+@prefix xsd:            <http://www.w3.org/2001/XMLSchema#> .
+
+
+
+gax-service:
+    a                             voaf:Vocabulary, owl:Ontology ;
+    rdfs:label                    "GAIA-X Service Ontology"@en ;
+    dct:title                     "GAIA-X Service Ontology"@en ;
+    dct:abstract                  "The GAIA-X service ontology contains the components needed to model a service in the GAIA-X architecture.\n\nThe different ontology modules can be found here: \n\nCore: <a href=\"https://www.w3id.org/gaia-x/core\">https://www.w3id.org/gaia-x/core</a> \n\nResource: <a href=\"https://www.w3id.org/gaia-x/resource\">https://www.w3id.org/gaia-x/resource</a> \n\nContract: <a href=\"https://www.w3id.org/gaia-x/contract\">https://www.w3id.org/gaia-x/contract</a> \n\nNode: <a href=\"https://www.w3id.org/gaia-x/node\">https://www.w3id.org/gaia-x/node</a> \n\nParticipant: <a href=\"https://www.w3id.org/gaia-x/participant\">https://www.w3id.org/gaia-x/participant</a> \n\nService: <a href=\"https://www.w3id.org/gaia-x/service\">https://www.w3id.org/gaia-x/service</a>" ;
+    cc:license                    <http://www.apache.org/licenses/LICENSE-2.0> ;
+    dct:creator                   "GAIA-X Open Work Package 'Self-Description'" ;
+    dct:contributor               <https://github.com/jpfr>, <https://github.com/jlangkau>, <https://github.com/clange>, <https://github.com/JohannesLipp>, <https://github.com/moosmannp> ;
+    dct:created                   "2021-10-18T12:00:00+01:00"^^xsd:dateTimeStamp ;
+    dct:modified                  "2021-10-18T12:00:00+01:00"^^xsd:dateTimeStamp ;
+    owl:versionInfo               "21/09" ;
+    vann:preferredNamespaceUri    "http://w3id.org/gaia-x/service#" ;
+    vann:preferredNamespacePrefix "gax-service" ;
+    void:vocabulary               vann:, void:, voaf:, dct: ;
+.
+
+## TODO: here we have to decide: how we want to describe Services, TOSCA?!?
+## <http://docs.oasis-open.org/tosca/TOSCA/v1.0/os/TOSCA-v1.0-os.html>
+
+gax-service:ServiceOffering
+    a                owl:Class ;
+    rdfs:label       "Service"@en ;
+# TODO: architecture shows <gax-service:Mesh> as super-class of <gax-service:ServiceOffering>
+# TODO: we have to discuss the <gax-service:Mesh>. It seems, that ist is a little bit clumsy in
+#       architecture - or JLA (@jottData) didn't understands it correctly...
+# rdfs:subClassOf  gax-service:mesh ;
+    rdfs:subClassOf  gax-resource:Resource, gax-core:Controllable, gax-core:Consumable ;
+    rdfs:comment     "A GAIA-X Service is an offering, which can be subscribed/ordered/consumed by a registered GAIA-X consumer."@en ;
+.
+
+gax-service:consumes
+    a               owl:ObjectProperty ;
+    rdfs:label      "consumes"@en ;
+    rdfs:domain     [ owl:unionOf (gax-service:ServiceOffering gax-core:Consumer)] ;
+    rdfs:range      gax-core:Consumable ;
+.
+
+gax-service:openApiDescription
+    a               owl:DatatypeProperty ;
+    rdfs:label      "open API description"@en ;
+    rdfs:comment    "Description of the open API through a URI reference or a direct YAML pasting as string"@en ;
+    rdfs:domain     gax-service:ServiceOffering ;
+    rdfs:range      [
+                        rdf:type    rdfs:Datatype ;
+                        owl:unionOf (
+                                        xsd:string
+                                        xsd:anyURI
+                                    )
+                    ] ;
+.
+
+#TODO: Domain? Currently used domains: gax-service:provider, gax-service:ServiceOffering
+gax-service:description
+    a                   owl:DatatypeProperty ;
+    rdfs:label          "description"@en ;
+    rdfs:subPropertyOf  schema:description ,
+                        rdfs:comment ;
+    rdfs:range          xsd:string
+.
+
+gax-service:ServiceOfferingSelfDescription
+    a                owl:Class ;
+    rdfs:label       "ServiceSelfDescription"@en ;
+    rdfs:subClassOf  gax-core:ResourceSelfDescription ;
+.
+
+gax-service:ServiceInstance
+    a                owl:Class ;
+    rdfs:label       "ServiceInstance"@en ;
+    rdfs:comment "Realisation by the Provider of the Service Offering."@e ;
+# TODO: to dbe discussed. Architecture shows it as sub-class of <gax-service:Service>?!?
+    rdfs:subClassOf  gax-service:Service, gax-core:Providable, gax-core:Consumable ;
+.
+
+gax-service:ServiceInstanceSelfDescription
+    a                owl:Class ;
+    rdfs:label       "ServiceInstanceSelfDescription"@en ;
+    rdfs:subClassOf  gax-core:ResourceSelfDescription ;
+.
+
+gax-service:hasAccessRights
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:string ;
+    #TODO: domain?
+.
+
+gax-service:hasAddOnType
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:string ;
+    #TODO: domain?
+.
+
+gax-service:hasAggregatedLogsAvailable
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:boolean ;
+    #TODO: domain?
+.
+
+gax-service:hasAggregatedLogsAvailableDurationDays
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:integer ;
+    #TODO: domain?
+.
+
+gax-service:hasAmount
+    a                   owl:DatatypeProperty ;
+    rdfs:domain         gax-service:BasicPaymentModel ;
+    rdfs:range          xsd:string ,
+                        xsd:decimal ;
+.
+
+gax-service:hasApiType
+    a                   owl:DatatypeProperty ;
+    rdfs:domain         gax-service:ServiceOffering ;
+    rdfs:range          xsd:string ;
+.
+
+gax-service:hasApplicationMetrics
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:boolean ;
+    #TODO: domain?
+.
+
+gax-service:hasApplicationMetricsIntervalSeconds
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:integer ;
+    #TODO: domain?
+.
+
+gax-service:hasBaseUnitReference
+    a                   owl:DatatypeProperty ;
+    rdfs:domain         gax-service:PayPerAddOnModel,
+                        gax-service:PayPerUseModel ;
+    rdfs:range          xsd:string ;
+.
+
+gax-service:hasContentType
+    a                   owl:DatatypeProperty ;
+    rdfs:domain         gax-service:ServiceOffering ;
+    rdfs:range          xsd:string ;
+.
+
+gax-service:hasContractPeriod
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:string ;
+    #TODO: domain?
+.
+
+gax-service:hasCustomDomainsIncluded
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:boolean ;
+    #TODO: domain?
+.
+
+gax-service:hasDownloadBandwidth
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:string ;
+    #TODO: domain?
+.
+
+gax-service:hasFrequenceOfPayment
+    a                   owl:DatatypeProperty ;
+    rdfs:domain         gax-service:BasicPaymentModel ;
+    rdfs:range          xsd:string ;
+.
+
+gax-service:hasBilling
+    a                   owl:ObjectProperty ;
+    rdfs:domain         gax-service:ServiceOffering ;
+    rdfs:range          gax-service:BasicPaymentModel ;
+.
+
+gax-service:hasDeploymentDetails
+    a                   owl:ObjectProperty ;
+    rdfs:domain         gax-service:ServiceOffering ;
+    rdfs:range          gax-service:DeploymentDetails ;
+.
+
+gax-service:hasDeploymentScriptUrl
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:string ;
+    #TODO: domain?
+.
+
+
+gax-service:hasDocumentationUrl
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:string ;
+    #TODO: domain?
+.
+
+gax-service:hasRepository
+    a                   owl:ObjectProperty ;
+.
+
+gax-service:hasScriptUrl
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:string ;
+    #TODO: domain?
+.
+
+gax-service:hasInitialMemory
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:string ;
+    #TODO: domain?
+.
+
+gax-service:hasInitialStorage
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:string ;
+    #TODO: domain?
+.
+
+gax-service:hasInitialTerminatingMemory
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:string ;
+    rdfs:comment        "The initial size of memory resource allocated to an execution-unit with an active deadline (includes builds, deployers, and jobs)"@en ;
+
+    #TODO: domain?
+.
+
+gax-service:hasInstructions
+    a                   owl:ObjectProperty ;
+.
+
+gax-service:hasKubernetesVersions
+    a                   owl:ObjectProperty ;
+.
+
+gax-service:locatedIn
+    a                   owl:DatatypeProperty ;
+    rdfs:domain         gax-service:ServiceOffering ;
+    rdfs:range          xsd:string ,
+                        xsd:anyURI ;
+.
+
+gax-service:hasLogin
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:string ;
+    #TODO: domain?
+.
+
+gax-service:hasLogInterval
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:boolean ;
+    #TODO: domain?
+.
+
+gax-service:hasLogIntervalSeconds
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:integer ;
+    #TODO: domain?
+.
+
+gax-service:hasMaxCapabilities
+    a                   owl:ObjectProperty ;
+.
+
+gax-service:hasMaxCpuCore
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:integer ;
+    #TODO: domain?
+.
+
+gax-service:hasMaxStorage
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:string ;
+    #TODO: domain?
+.
+
+gax-service:hasMaxMemory 
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:string ;
+    #TODO: domain?
+.
+
+gax-service:maxProjectsSupported
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:integer ;
+    #TODO: domain?
+.
+
+gax-service:hasMaxTerminatingMemory
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:string ;
+    rdfs:comment        "The maximum size of memory resource allocated to an execution-unit with an active deadline (includes builds, deployers, and jobs)"@en ;
+    #TODO: domain?
+.
+
+gax-service:hasMinCpuCore
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:integer ;
+    #TODO: domain?
+.
+
+gax-service:hasMinDBmembers
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:integer ;
+    #TODO: domain?
+.
+
+gax-service:hasMinStorage
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:string ;
+    #TODO: domain?
+.
+
+gax-service:hasMinMemory
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:string ;
+    #TODO: domain?
+.
+
+gax-service:hasNodeCount
+    a                   owl:ObjectProperty ;
+    rdfs:domain         gax-service:ServiceOffering ;
+    rdfs:range          xsd:integer ;
+.
+
+gax-service:hasPassword
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:string ;
+    #TODO: domain?
+.
+
+gax-service:per
+    a                   owl:DatatypeProperty ;
+    rdfs:domain         gax-service:PayPerUseModel ;
+    rdfs:range          xsd:string ;
+.
+
+gax-service:produces
+    a                   owl:ObjectProperty ;
+    rdfs:domain         gax-service:ServiceOffering ;
+    rdfs:range          gax-service:ApiDescription ;
+.
+
+gax-service:providedBy
+    a                   owl:DatatypeProperty ;
+    rdfs:range          gax-participant:Provider ;
+    #TODO: domain?
+.
+
+gax-service:hasRegion
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:string ;
+    #TODO: domain?
+.
+
+gax-service:requires
+    a                   owl:ObjectProperty ;
+.
+
+gax-service:hasScreenshot
+    a                   owl:ObjectProperty ;
+    rdfs:domain         gax-service:ServiceOffering ;
+    rdfs:range          schema:MediaObject ;
+.
+
+gax-service:supported
+    a                   owl:ObjectProperty ;
+.
+
+gax-service:hasTag
+    a                   owl:DatatypeProperty ;
+    rdfs:domain         gax-service:ServiceOffering ;
+    rdfs:range          xsd:string ;
+.
+
+gax-service:hasUnit
+    a                   owl:DatatypeProperty ;
+    rdfs:domain         gax-service:BasicPaymentModel ;
+    rdfs:range          xsd:string ;
+.
+
+gax-service:hasUploadBandwidth
+    a                   owl:DatatypeProperty ;
+    rdfs:range          xsd:string ;
+    #TODO: domain?
+.
+
+gax-service:utilizes
+    a                   owl:ObjectProperty ;
+    rdfs:domain         gax-service:ServiceOffering ;
+    rdfs:range          gax-service:ServiceOffering ;
+    rdfs:label          "utilizes" ;
+.
+
+gax-service:hasVersion
+    a                   owl:DatatypeProperty ;
+    rdfs:domain         gax-service:ServiceOffering ;
+    rdfs:range          xsd:string ;
+.
+
+gax-service:ApiDescription
+    a                   owl:Class ;
+    rdfs:label          "API description"@en ;
+    rdfs:subClassOf     gax-core:Consumable ;
+.
+
+gax-service:BasicPaymentModel
+    a                   owl:Class ;
+    rdfs:label          "basic payment model"@en ;
+    rdfs:comment        "This class describes a payment model, which can have several billing details, e.g. amount and unit of payment and frequency of payment."@en ;
+.
+
+gax-service:PayPerUseModel
+    a                   owl:Class ;
+    rdfs:subClassOf     gax-service:BasicPaymentModel ;
+    rdfs:label          "pay per use model"@en ;
+.
+
+gax-service:PayPerAddOnModel
+    a                   owl:Class ;
+    rdfs:subClassOf     gax-service:BasicPaymentModel ;
+    rdfs:label          "pay per addon model"@en ;
+.
+
+gax-service:DeploymentDetails
+    a                   owl:Class ;
+    rdfs:label          "Deployment Details" ;
+.
+
+schema:MediaObject a owl:Class .
+
+gax-service:hasProvisionType
+    a                   owl:DatatypeProperty ;
+    rdfs:label          "has provision type"@en ;
+    rdfs:domain         gax-service:ServiceOffering ;
+    rdfs:range          xsd:string ,
+                        xsd:anyURI ;
+.
+
+gax-service:hasServiceModel
+    a                   owl:DatatypeProperty ;
+    rdfs:label          "has service model"@en ;
+    rdfs:domain         gax-service:ServiceOffering ;
+    rdfs:range          xsd:string ,
+                        xsd:anyURI ;
+.
+
+gax-service:hasWebAddress
+    a                   owl:DatatypeProperty ;
+    rdfs:label          "has web address"@en ;
+    rdfs:domain         gax-service:ServiceOffering ;
+    rdfs:range          xsd:anyURI ;
+.
+
+gax-service:hasServiceTitle
+    a                   owl:DatatypeProperty ;
+    rdfs:label          "has service title"@en ;
+    rdfs:domain         gax-service:ServiceOffering ;
+    rdfs:range          xsd:string ;
+.
+

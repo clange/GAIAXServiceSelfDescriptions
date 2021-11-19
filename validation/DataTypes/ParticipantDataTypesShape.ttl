@@ -1,0 +1,134 @@
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix gax-core:  <http://w3id.org/gaia-x/core#> .
+@prefix gax-participant:  <http://w3id.org/gaia-x/participant#> .
+@prefix vcard: <https://www.w3.org/2006/vcard/ns#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+gax-participant:ParticipantDataTypesShape
+  a              sh:NodeShape ;
+  sh:targetClass gax-participant:Participant ;
+  sh:property    [ sh:path     gax-participant:hasCloudLocation ;
+                   sh:class    gax-participant:Region ] ;
+  sh:property    [ sh:path     gax-participant:hasCloudZoneTypes ;
+                   sh:datatype xsd:string ] ;
+  sh:property    [ sh:path     gax-participant:hasLocation ;
+                   sh:class    gax-participant:Region ] ;
+  sh:property    [ sh:path     gax-participant:hasLogo ;
+                   sh:nodeKind sh:IRI ] ;
+  sh:property    [ sh:path     gax-participant:hasMarketingImage ;
+                   sh:datatype xsd:anyURI ] ;
+  sh:property    [ sh:path     gax-participant:hasPhoneNumber ;
+                   sh:datatype xsd:string ] ;
+  sh:property    [ sh:path     gax-participant:hasTransparencyRegister ;
+                   sh:nodeKind sh:IRI ] ;
+  sh:property    [ sh:path     gax-participant:hasBusinessIdentifier ;
+                   sh:class    gax-participant:BusinessIdentifier ] ;
+  sh:property    [ sh:path     gax-participant:hasCompanyType ;
+                   sh:datatype xsd:string ] ;
+  sh:property    [ sh:path     gax-participant:hasCertification ;
+                   sh:class    gax-participant:Certification ] ;
+  sh:property    [ sh:path     gax-participant:hasDataProtectionOfficer ;
+                   sh:class    vcard:Agent ] ;
+  sh:property    [ sh:path     gax-participant:operationsSubjectOnlyToEUJurisdiction ;
+                   sh:datatype xsd:boolean ] ;
+  sh:property    [ sh:path     gax-participant:subjectToNonEUJurisdiction ;
+                   sh:datatype xsd:boolean ] ;
+  sh:property    [ sh:path     gax-participant:nonEUJurisdictionCountries ;
+                   sh:datatype xsd:string ] ;
+  sh:property    [ sh:path     gax-participant:hasGeneralGaiaxContact ;
+                   sh:class    vcard:Agent ] ;
+  sh:property    [ sh:path     gax-participant:nonEUJurisdictionHeadquarter ;
+                   sh:node     gax-participant:JurisdictionHeadquarterShape ] ;
+  sh:property    [ sh:path     gax-participant:hasCorporateEmailAddress ;
+                   sh:datatype xsd:string ] ;
+  sh:property    [ sh:path     gax-participant:hasMemberPerson ;
+                   sh:class    vcard:Agent ] ;
+  sh:property    [ sh:path     gax-participant:hasMemberParticipant ;
+                   sh:class    gax-participant:Participant ] ;
+  sh:property    [ sh:path     gax-participant:hasLegalForm ;
+                   sh:datatype xsd:string ] ;
+  sh:property    [ sh:path     gax-core:managedBy ;
+                   sh:class    gax-participant:Participant  ] ;
+  .
+
+gax-participant:AgentShape
+  a              sh:NodeShape ;
+  sh:targetClass vcard:Agent ;
+  sh:property    [ sh:path     vcard:given-name ;
+                   sh:datatype xsd:string ] ;
+  sh:property    [ sh:path     vcard:familiy-name ;
+                   sh:datatype xsd:string ] ;
+  sh:property    [ sh:path     vcard:nickname ;
+                   sh:datatype xsd:string ] ;
+  sh:property    [ sh:path     vcard:hasEmail ;
+                   sh:nodeKind sh:IRI ] ;
+  sh:property    [ sh:path     vcard:hasPhoto ;
+                   sh:nodeKind sh:IRI ] ;
+  sh:property    [ sh:path     vcard:url ;
+                   sh:nodeKind sh:IRI ] ;
+.
+
+gax-participant:AddressShape
+  a              sh:NodeShape ;
+  sh:targetClass vcard:Address ;
+  sh:property    [ sh:path     vcard:street-address ;
+                   sh:datatype xsd:string ] ;
+  sh:property    [ sh:path     vcard:postal-code ;
+                   sh:datatype xsd:string ] ;
+  sh:property    [ sh:path     vcard:country-name ;
+                   sh:datatype xsd:string ] ;
+  sh:property    [ sh:path     vcard:locality ;
+                   sh:datatype xsd:string ] ;
+.
+
+gax-participant:PhoneShape
+  a              sh:NodeShape ;
+  sh:targetClass vcard:Voice , vcard:Work ;
+  sh:property    [ sh:path     vcard:hasValue ;
+                   sh:nodeKind sh:IRI ] ;
+.
+
+gax-participant:BusinessIdentifierShape
+  a              sh:NodeShape ;
+  sh:targetClass gax-participant:BusinessIdentifier ;
+  sh:property    [ sh:path     gax-participant:hasIdentifierNumber ;
+                   sh:datatype xsd:string ;
+                   sh:minCount 1 ] ;
+  sh:property    [ sh:path     gax-participant:hasIdentifierSystem ;
+                   sh:datatype xsd:string ;
+                   sh:minCount 1 ] ;
+.
+
+gax-participant:JurisdictionHeadquarterShape
+  a              sh:NodeShape ;
+  sh:property    [ sh:path     gax-participant:hasLocation ;
+                   sh:datatype xsd:string ] ;
+  sh:property    [ sh:path     gax-participant:fallsUnderJurisdiction ;
+                   sh:datatype xsd:string ] ;
+.
+
+gax-participant:ProviderShape
+  a              sh:NodeShape ;
+  sh:targetClass gax-participant:Provider ;
+  sh:property    [ sh:path     gax-core:operates ;
+                   sh:class    gax-core:Resource ] ;
+  sh:property    [ sh:path     gax-core:providesResourcesFrom ;
+                   sh:class    gax-core:ResourceOwner ] ;
+.
+
+gax-participant:DataOwnerShape
+  a              sh:NodeShape ;
+  sh:targetClass gax-participant:DataOwner ;
+  sh:property    [ sh:path     gax-participant:makesAvailable ;
+                   sh:class    gax-core:DataResource ] ;
+.
+
+gax-participant:ConsumerShape
+  a              sh:NodeShape ;
+  sh:targetClass gax-core:Consumer ;
+  sh:property    [ sh:path     gax-core:offersTo ;
+                   sh:class    gax-core:EndUser ] ;
+  sh:property    [ sh:path     gax-participant:hasCitizenship ;
+                   sh:datatype xsd:string ;
+                   sh:minCount 1 ] ;
+.

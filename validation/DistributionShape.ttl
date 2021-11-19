@@ -1,0 +1,30 @@
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix gax:  <http://w3id.org/gaia-x/core#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix spdx: <http://spdx.org/rdf/terms#> .
+@prefix dcat: <http://www.w3.org/ns/dcat#> .
+
+gax:DistributionShape
+    a sh:NodeShape ;
+    sh:targetClass gax:Distribution ;
+
+    sh:property         [ sh:path     gax:mediaType ;
+                          sh:class    dct:MediaType ];
+    sh:property         [ sh:path     gax:format ;
+                          sh:class    dct:MediaTypeOrExtent ];
+    sh:property         [ sh:path     gax:byteSize  ;
+                          sh:datatype xsd:decimal ];
+    sh:property         [ sh:path     gax:checksum ;
+                          sh:class    spdx:Checksum ] ;
+    sh:property         [ sh:path     gax:creationDate  ;
+                          sh:datatype xsd:dateTimeStamp ];
+    sh:property         [ sh:path     gax:conformsTo  ;
+                          sh:class    dct:Standard ];
+    sh:property         [ sh:path     gax:accessURL ;
+                          sh:datatype xsd:anyURI ];
+    sh:property         [ sh:path     gax:downloadURL ;
+                          sh:datatype xsd:anyURI ];
+    sh:property         [ sh:path     gax:accessService  ;
+                          sh:class    dcat:DataService ];
+.

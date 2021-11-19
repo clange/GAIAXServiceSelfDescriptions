@@ -1,0 +1,437 @@
+@prefix cc:                 <http://creativecommons.org/ns#> .
+@prefix dct:                <http://purl.org/dc/terms/> .
+@prefix foaf:               <http://xmlns.com/foaf/0.1/> .
+@prefix gax-resource:          <http://w3id.org/gaia-x/resource#> .
+@prefix gax-core:           <http://w3id.org/gaia-x/core#> .
+@prefix gax-node:           <http://w3id.org/gaia-x/node#> .
+@prefix gax-participant:    <http://w3id.org/gaia-x/participant#> .
+@prefix gax-service:        <http://w3id.org/gaia-x/service#> .
+@prefix ids:                <https://w3id.org/idsa/core/> .
+@prefix owl:                <http://www.w3.org/2002/07/owl#> .
+@prefix rdf:                <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs:               <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix skos:               <http://www.w3.org/2004/02/skos/core#> .
+@prefix vann:               <http://purl.org/vocab/vann/> .
+@prefix vcard:              <http://www.w3.org/2006/vcard/ns#> .
+@prefix voaf:               <http://purl.org/vocommons/voaf#> .
+@prefix void:               <http://rdfs.org/ns/void#> .
+@prefix xsd:                <http://www.w3.org/2001/XMLSchema#> .
+@prefix schema:         <http://schema.org/> .
+
+
+gax-participant:
+    a                             voaf:Vocabulary, owl:Ontology ;
+    rdfs:label                    "GAIA-X Participant Ontology"@en ;
+    dct:title                     "GAIA-X Participant Ontology"@en ;
+    dct:abstract                  "The GAIA-X participant ontology contains the components needed to model a participant in the GAIA-X architecture.\n\nThe different ontology modules can be found here: \n\nCore: <a href=\"https://www.w3id.org/gaia-x/core\">https://www.w3id.org/gaia-x/core</a> \n\nResource: <a href=\"https://www.w3id.org/gaia-x/resource\">https://www.w3id.org/gaia-x/resource</a> \n\nContract: <a href=\"https://www.w3id.org/gaia-x/contract\">https://www.w3id.org/gaia-x/contract</a> \n\nNode: <a href=\"https://www.w3id.org/gaia-x/node\">https://www.w3id.org/gaia-x/node</a> \n\nParticipant: <a href=\"https://www.w3id.org/gaia-x/participant\">https://www.w3id.org/gaia-x/participant</a> \n\nService: <a href=\"https://www.w3id.org/gaia-x/service\">https://www.w3id.org/gaia-x/service</a>" ;
+    cc:license                    <http://www.apache.org/licenses/LICENSE-2.0> ;
+    dct:creator                   "GAIA-X Open Work Package 'Self-Description'" ;
+    dct:contributor               <https://github.com/jpfr>, <https://github.com/jlangkau>, <https://github.com/clange>, <https://github.com/JohannesLipp>, <https://github.com/moosmannp> ;
+    dct:created                   "2021-10-18T12:00:00+01:00"^^xsd:dateTimeStamp ;
+    dct:modified                  "2021-10-18T12:00:00+01:00"^^xsd:dateTimeStamp ;
+    owl:versionInfo               "21/09" ;
+    vann:preferredNamespaceUri    "http://w3id.org/gaia-x/participant#" ;
+    vann:preferredNamespacePrefix "gax-participant" ;
+    void:vocabulary               vann:, void:, voaf:, dct: ;
+.
+
+gax-participant:Participant
+    a                owl:Class ;
+    rdfs:label       "Participant"@en ;
+    rdfs:comment     "A Participant is a natural or legal person who is identified, authorized and has a GAIA-X Self-Description."@en ;
+    rdfs:seeAlso     ids:Participant ;
+.
+
+gax-participant:ServiceConsumer
+    a                owl:Class ;
+    rdfs:label       "Service Consumer"@en ;
+    rdfs:subClassOf  gax-participant:Participant ;
+.
+
+gax-participant:controls
+    a                owl:ObjectProperty ;
+    rdfs:label       "controls"@en ;
+    rdfs:domain      gax-participant:ServiceConsumer ;
+    rdfs:range       gax-core:Controllable ;
+.
+
+gax-participant:ExternalClient
+    a                owl:Class ;
+    rdfs:label      "external client"@en ;
+    rdfs:subClassOf gax-core:Controllable, gax-core:Consumable ;
+.
+
+gax-participant:DataOwner
+    a                owl:Class ;
+    rdfs:label       "data owner"@en ;
+    rdfs:subClassOf  gax-participant:Participant ;
+.
+
+gax-participant:makesAvailable
+    a                owl:ObjectProperty ;
+    rdfs:label       "makes available"@en ;
+    rdfs:domain      gax-participant:DataOwner ;
+    rdfs:range       gax-resource:DataResource ;
+.
+
+gax-participant:ParticipantCredential
+    a                owl:Class ;
+    rdfs:label       "Participant Credential"@en ;
+.
+
+
+####################
+## Provider
+####################
+
+gax-participant:Provider
+    a                owl:Class ;
+    rdfs:label       "Provider"@en ;
+    rdfs:comment     "A GAIA-X Provider is a registered legal entity, which operates Gaia-X nodes and/or provides GAIA-X services."@en ;
+    rdfs:subClassOf  gax-participant:Participant ;
+.
+
+gax-participant:BusinessIdentifier
+    a          owl:Class ;
+    rdfs:label "business identifier"@en ;
+    rdfs:comment "A business identifier is a number of different size and helps to identify a company. E.g., the Data Universal Numbering System, abbreviated as DUNS."@en ;
+.
+
+gax-participant:hasIdentifierSystem
+    a            owl:DatatypeProperty ;
+    rdfs:domain  gax-participant:BusinessIdentifier ;
+    rdfs:range   xsd:string ;
+    rdfs:label   "has identifier system"@en ;
+    rdfs:comment "This property is used to define the system used as an business identifier. E.g., DUNS or SIRET."@en ;
+.
+
+gax-participant:hasIdentifierNumber
+    a            owl:DatatypeProperty ;
+    rdfs:domain  gax-participant:BusinessIdentifier  ;
+    rdfs:range   xsd:string ;
+    rdfs:label   "has identifier number"@en ;
+    rdfs:comment "This property is used to define the number used as an business identifier."@en ;
+.
+
+
+## region <https://gaia.coyocloud.com/web/senders/61b491a5-4250-4ef4-a5b1-6760f609be26/documents/0bed3ce8-9c71-46aa-a27b-1523da64e0e9>
+
+gax-participant:ServiceProvider
+    a                owl:Class ;
+    rdfs:label       "Service Provider"@en ;
+    rdfs:subClassOf  gax-participant:Provider ;
+.
+
+gax-participant:ServiceInstanceProvider
+    a                owl:Class ;
+    rdfs:label       "Service Instance Provider"@en ;
+    rdfs:subClassOf  gax-participant:Provider ;
+.
+
+gax-participant:NodeProvider
+    a                owl:Class ;
+    rdfs:label       "Node Provider"@en ;
+    rdfs:subClassOf  gax-participant:Provider ;
+.
+
+gax-participant:provides
+    a                owl:ObjectProperty ;
+    rdfs:label       "provides"@en ;
+    rdfs:domain      [ owl:unionOf (gax-participant:NodeProvider gax-participant:ServiceProvider)] ;
+    rdfs:range       gax-core:Providable ;
+.
+
+gax-participant:hasCommercialRegister
+    a                  owl:ObjectProperty ;
+    rdfs:subPropertyOf vcard:hasAddress ;
+    rdfs:subPropertyOf gax-core:MustCriterion ;
+    rdfs:domain        gax-participant:Participant ;
+    rdfs:range         vcard:Address ;
+.
+
+gax-participant:hasCompanyType
+    a           owl:ObjectProperty ;
+    rdfs:domain gax-participant:Participant ;
+    rdfs:range  xsd:string ;
+    rdfs:label  "has company type"@en ;
+.
+
+gax-participant:hasLegallyBindingAddress
+    a                  owl:ObjectProperty ;
+    rdfs:subPropertyOf gax-core:MustCriterion ;
+    rdfs:subPropertyOf ids:primarySite ;
+# which extends org:hasPrimarySite. Then add ids:siteAddress to add string
+    rdfs:domain        gax-participant:Participant ;
+    rdfs:range         vcard:Address ;
+    rdfs:label         "has legally binding address" ;
+.
+
+gax-participant:hasWebAddress
+    a                  owl:DatatypeProperty ;
+    rdfs:subPropertyOf gax-core:MustCriterion ;
+    rdfs:subPropertyOf gax-core:OverridableCriterion ;
+    rdfs:subPropertyOf ids:corporateHomepage ;
+# which extends vcard:hasURL ;
+    rdfs:domain        gax-participant:Provider ;
+    rdfs:range         xsd:anyURI ;
+.
+
+gax-participant:hasIndividualContactLegal
+    a                  owl:ObjectProperty ;
+    rdfs:subPropertyOf gax-core:MustCriterion ;
+    rdfs:subPropertyOf gax-core:HiddenCriterion ;
+    rdfs:subPropertyOf gax-core:OverridableCriterion ;
+    rdfs:domain        gax-participant:Provider ;
+# TODO: discuss : rdfs:range ids:Person instead?
+# TODO: do we act on <vcard:Agent> OR on <foaf:Agent>/<foaf:Person>
+# ... JLA,@jottData: preferring <foaf:Agent>, so it can be an <org:Organization>, too...
+    rdfs:range      [
+                        rdf:type    rdfs:Datatype ;
+                        owl:unionOf (
+                                        vcard:Agent
+                                        schema:Person
+                                    )
+                    ] ;
+    rdfs:label       "has individual contact legal"@en ;
+.
+
+gax-participant:hasIndividualContactTechnical
+    a                  owl:ObjectProperty ;
+    rdfs:subPropertyOf gax-core:MustCriterion ;
+    rdfs:subPropertyOf gax-core:HiddenCriterion ;
+    rdfs:subPropertyOf gax-core:OverridableCriterion ;
+    rdfs:domain        gax-participant:Provider ;
+    rdfs:range      [
+                        rdf:type    rdfs:Datatype ;
+                        owl:unionOf (
+                                        vcard:Agent
+                                        schema:Person
+                                    )
+                    ] ;
+    rdfs:label       "has individual contact technical"@en ;
+.
+
+gax-participant:Certification
+    a                owl:Class ;
+    rdfs:label       "Certification"@en ;
+    rdfs:comment     "General class of certifications."
+.
+
+gax-participant:hasCertification
+    a                  owl:ObjectProperty ;
+    rdfs:subPropertyOf gax-core:MustCriterion ;
+    rdfs:subPropertyOf gax-core:OverridableCriterion ;
+    rdfs:range  gax-participant:Certification ;
+.
+
+gax-participant:CodeOfConduct
+    a                owl:Class ;
+    rdfs:label       "Code of Conduct"@en ;
+    rdfs:comment     "General class of code of conducts."
+.
+
+gax-participant:followsCodeOfConduct
+    a                  owl:ObjectProperty ;
+    rdfs:subPropertyOf gax-core:MustCriterion ;
+    rdfs:subPropertyOf gax-core:OverridableCriterion ;
+    rdfs:range  gax-participant:CodeOfConduct ;
+.
+
+gax-participant:hasTransparencyRegister
+    a           rdf:Property ;
+    rdfs:domain gax-participant:Participant ;
+    rdfs:range  xsd:string ;
+.
+
+gax-participant:hasBusinessIdentifier
+    a           owl:ObjectProperty ;
+    rdfs:domain gax-participant:Participant ;
+    rdfs:range  gax-participant:BusinessIdentifier ;
+.
+
+gax-participant:hasDataProtectionOfficer
+    a           rdf:Property ;
+    rdfs:domain gax-participant:Participant ;
+    rdfs:range  vcard:Agent ;
+.
+
+gax-participant:hasCloudLocation
+    a           owl:ObjectProperty ;
+    rdfs:domain gax-participant:Provider ;
+    rdfs:range  gax-participant:Region ; #TODO: use vcard?
+    skos:editorialNote "Node property";
+.
+
+gax-participant:hasCloudZoneTypes
+    a           owl:DatatypeProperty ;
+    rdfs:domain gax-participant:Provider ;
+    rdfs:range  xsd:string ;
+.
+
+gax-participant:hasLogo
+    a           owl:DatatypeProperty ;
+    rdfs:domain gax-participant:Participant ;
+    rdfs:range  xsd:anyURI ;
+.
+
+gax-participant:hasMarketingImage
+    a           owl:DatatypeProperty ;
+    rdfs:domain [ owl:unionOf (gax-participant:Participant gax-service:Service)] ;
+    rdfs:range  xsd:anyURI ;
+.
+
+gax-participant:hasLegallyBindingName
+    a                   owl:DatatypeProperty ;
+    rdfs:subPropertyOf  gax-core:MustCriterion ;
+    rdfs:subPropertyOf  gax-participant:hasName ;
+    rdfs:domain         gax-participant:Participant ;
+    rdfs:range          xsd:string ;
+    rdfs:label          "has legally binding name" ;
+.
+
+gax-participant:hasName
+    a                   owl:DatatypeProperty ;
+    rdfs:subPropertyOf  ids:name ;
+    rdfs:range          xsd:string ;
+.
+
+gax-participant:hasBrandName
+    a                   owl:DatatypeProperty ;
+    rdfs:subPropertyOf  gax-core:MustCriterion ;
+    rdfs:subPropertyOf  gax-participant:hasName ;
+    rdfs:domain         gax-participant:Participant ;
+    rdfs:range          xsd:string ;
+.
+
+#TODO: Necessary? Phone number available with legal and technical contact
+gax-participant:hasPhoneNumber
+    a           owl:DatatypeProperty ;
+    rdfs:domain gax-participant:Participant ;
+    rdfs:range  xsd:string ;
+.
+
+gax-participant:Region
+    a               owl:Class ;
+    rdfs:label      "region"@en ;
+    rdfs:comment    "Describes a region, e.g. a country or a city."@en ;
+.
+
+gax-participant:hasLocation
+    a               owl:ObjectProperty ;
+    rdfs:range      gax-participant:Region ;
+.
+
+gax-participant:subjectToNonEUJurisdiction
+    a               owl:DatatypeProperty ;
+    rdfs:domain     gax-participant:Provider ;
+    rdfs:range      xsd:boolean ;
+    rdfs:label      "subject to non-EU jurisdiction" ;
+    rdfs:comment    "True, if the provider is subject to any non-EU jurisdiction regarding data access. False otherwise.";
+.
+
+gax-participant:nonEUJurisdictionCountries
+    a               owl:DatatypeProperty ;
+    rdfs:domain     gax-participant:Provider ;
+    rdfs:range      xsd:string ;
+    rdfs:label      "non-EU jurisdiction countries" ;
+    rdfs:comment    "List of countries from which a provider is subject to jurisdiction regarding data access.";
+.
+
+gax-participant:operationsSubjectOnlyToEUJurisdiction
+    a               owl:DatatypeProperty ;
+    rdfs:domain     gax-participant:Provider ;
+    rdfs:range      xsd:boolean ;
+    rdfs:label      "operation subject only to EU jurisdiction" ;
+    rdfs:comment    "True, if the operations are subject only to EU jurisdiction. False otherwise.";
+.
+
+gax-participant:nonEUJurisdictionHeadquarter
+    a               owl:ObjectProperty ;
+    rdfs:domain     gax-participant:Provider ;
+    rdfs:label      "non-EU jurisdiction headquarter" ;
+    rdfs:range      vcard:Address ;
+.
+
+gax-participant:hasJurisdiction
+    a               owl:DatatypeProperty ;
+    rdfs:domain         gax-participant:Provider ;
+    rdfs:range      [
+                        rdf:type    rdfs:Datatype ;
+                        owl:unionOf (
+                                        xsd:string
+                                        xsd:anyURI
+                                    )
+                    ] ;
+    rdfs:label      "has jurisdiction" ;
+.
+
+gax-participant:hasGeneralGaiaxContact
+    a                  owl:ObjectProperty ;
+    rdfs:domain        gax-participant:Provider ;
+    rdfs:range         vcard:Agent ;
+    rdfs:label         "has general GAIA-X contact" ;
+.
+
+gax-participant:hasCorporateEmailAddress
+    a                   owl:DatatypeProperty ;
+    rdfs:subPropertyOf  ids:corporateEmailAddress ;
+    rdfs:domain         gax-participant:Participant ;
+    rdfs:range          xsd:string ;
+    rdfs:label          "has corporate email address" ;
+.
+
+gax-participant:hasMemberParticipant
+    a                   owl:ObjectProperty ;
+    rdfs:subPropertyOf  ids:memberParticipant ;
+    rdfs:domain         gax-participant:Participant ;
+    rdfs:comment        "Participant has at least one member who also participants (useful to represent hierarchical relation in a participant's organization or group of participants, e.g., members of a collaboration)."@en ;
+    rdfs:range          gax-participant:Participant ;
+    rdfs:label          "has member participant" ;
+.
+
+gax-participant:hasMemberPerson
+    a                   owl:ObjectProperty ;
+    rdfs:subPropertyOf  ids:memberPerson ;
+    rdfs:domain         gax-participant:Participant ;
+    rdfs:range          vcard:Agent ;
+    rdfs:label          "has member person" ;
+.
+
+gax-participant:hasLegalForm
+    a                   owl:DatatypeProperty ;
+    rdfs:subPropertyOf  ids:legalForm ;
+    rdfs:domain         gax-participant:Provider ;
+    rdfs:range      [
+                        rdf:type    rdfs:Datatype ;
+                        owl:unionOf (
+                                        xsd:string
+                                        xsd:anyURI
+                                    )
+                    ] ;
+    rdfs:label          "has legal Form" ;
+.
+
+gax-participant:hasCitizenship
+    a                   owl:DatatypeProperty ;
+    rdfs:domain         gax-core:Consumer ;
+    rdfs:range          xsd:string ;
+    rdfs:label          "has citizenship" ;
+.
+
+gax-participant:hasSalesTaxID
+    a                   owl:DatatypeProperty ;
+    rdfs:domain         gax-participant:Provider ;
+    rdfs:range          xsd:string ;
+    rdfs:label          "has sales tax ID" ;
+.
+
+gax-participant:hasLegalRegistrationNumber
+    a                   owl:DatatypeProperty ;
+    rdfs:domain         gax-participant:Provider ;
+    rdfs:range          xsd:string ;
+    rdfs:label          "has legal registration number" ;
+.
+
+ids:Person a owl:Class .
+vcard:Address a owl:Class .
+vcard:Agent a owl:Class .

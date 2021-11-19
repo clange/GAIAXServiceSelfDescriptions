@@ -1,0 +1,199 @@
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+@prefix dct: <http://purl.org/dc/terms/> .
+@prefix gax-core:           <http://w3id.org/gaia-x/core#> .
+@prefix gax-service:  <http://w3id.org/gaia-x/service#> .
+@prefix gax-participant:    <http://w3id.org/gaia-x/participant#> .
+@prefix qudt: <http://www.qudt.org/2.1/schema/qudt> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix schema: <http://schema.org/> .
+@prefix vcard: <https://www.w3.org/2006/vcard/ns#> .
+@prefix xsd:  <http://www.w3.org/2001/XMLSchema#> .
+
+gax-service:DataTypeServiceShape
+  a              sh:NodeShape ;
+  sh:targetClass gax-service:ServiceOffering ;
+  sh:property    [ sh:path     gax-service:openApiDescription ;
+                   sh:or ( [ sh:datatype xsd:string ] [ sh:nodeKind sh:IRI ] ) ] ;
+  sh:property    [ sh:path     gax-service:hasDeploymentDetails ;
+                   sh:node     gax-service:DeploymentShape ] ;
+  sh:property    [ sh:path     gax-service:hasBilling ;
+                   sh:or ( [ sh:class gax-service:BasicPaymentModel ] [ sh:class gax-service:PayPerUseModel ] [ sh:class gax-service:PayPerAddOnModel]) ] ;
+  sh:property    [ sh:path     gax-participant:hasCertification ;
+                   sh:class    gax-participant:Certification ] ;
+  sh:property    [ sh:path     gax-participant:followsCodeOfConduct  ;
+                   sh:class    gax-participant:CodeOfConduct  ] ;
+  sh:property    [ sh:path     gax-service:consumes ;
+                   sh:or ( [ sh:class gax-service:ApiDescription ] [ sh:class gax-service:Service ] [ sh:class gax-participant:ExternalClient]) ] ;
+  sh:property    [ sh:path     gax-service:hasApiType ;
+                   sh:datatype xsd:string] ;
+  sh:property    [ sh:path     gax-service:locatedIn ;
+                   sh:or ( [ sh:datatype xsd:string ] [ sh:nodeKind sh:IRI ] ) ] ;
+  sh:property    [ sh:path     gax-participant:hasLocation ;
+                   sh:class    gax-participant:Region] ;
+  sh:property    [ sh:path     gax-service:produces ;
+                   sh:class    gax-service:ApiDescription] ;
+  sh:property    [ sh:path     gax-service:hasNodeCount ;
+                   sh:node     gax-service:NodeCountShape ] ;
+  sh:property    [ sh:path     gax-service:hasScreenshot ;
+                   sh:node     gax-service:ScreenshotShape ] ;
+  sh:property    [ sh:path     gax-service:utilizes ;
+                   sh:nodeKind sh:IRI ] ;
+  sh:property    [ sh:path     gax-core:managedBy ;
+                   sh:class    gax-participant:Participant  ] ;
+.
+
+gax-service:PaymentModelShape
+  a              sh:NodeShape ;
+  sh:targetClass gax-service:BasicPaymentModel, gax-service:PayPerUseModel, gax-service:PayPerAddOnModel ;
+  sh:property    [ sh:path     gax-service:hasPrice ;
+                   sh:class    gax-core:Measure ] ;
+  sh:property    [ sh:path     gax-service:hasFrequenceOfPayment ;
+                   sh:datatype xsd:string ] ;
+  sh:property    [ sh:path     gax-service:per ;
+                   sh:datatype xsd:string] ;
+  sh:property    [ sh:path     rdfs:comment ;
+                   sh:datatype xsd:string] ;
+  sh:property    [ sh:path     gax-service:hasBaseUnitReference ;
+                   sh:datatype xsd:string] ;
+  sh:property    [ sh:path     gax-service:hasAddOnType ;
+                   sh:datatype xsd:string] ;
+  sh:property    [ sh:path     gax-service:hasContractPeriod ;
+                   sh:datatype xsd:string] ;
+.
+
+gax-service:DeploymentShape
+  a              sh:NodeShape ;
+  sh:property    [ sh:path     gax-service:requires ;
+                   sh:node     gax-service:DeploymentRequirementsShape ] ;
+  sh:property    [ sh:path     gax-service:hasMaxCapabilities ;
+                   sh:node     gax-service:MaxCapabilitiesShape ] ;
+  sh:property    [ sh:path     gax-service:hasAggregatedLogsAvailable ;
+                   sh:datatype xsd:boolean ]  ;
+  sh:property    [ sh:path     gax-service:hasAggregatedLogsAvailableDurationDays ;
+                   sh:datatype xsd:integer ] ;
+  sh:property    [ sh:path     gax-service:hasLogInterval ;
+                   sh:datatype xsd:boolean ] ;
+  sh:property    [ sh:path     gax-service:hasLogIntervalSeconds ;
+                   sh:datatype xsd:integer ] ;
+  sh:property    [ sh:path     gax-service:hasApplicationMetrics ;
+                   sh:datatype xsd:boolean ] ;
+  sh:property    [ sh:path     gax-service:hasApplicationMetricsIntervalSeconds ;
+                   sh:datatype xsd:integer ] ;
+  sh:property    [ sh:path     gax-service:hasInstructions ;
+                   sh:node     gax-service:DeploymentInstructionsShape ] ;
+  sh:property    [ sh:path     gax-service:hasRegion ;
+                   sh:datatype xsd:string ] ;
+  sh:property    [ sh:path     gax-service:hasProvider ;
+                   sh:datatype xsd:string] ;
+  sh:property    [ sh:path     gax-service:hasKubernetesVersions ;
+                   sh:node     gax-service:KubernetesVersionsShape ] ;
+.
+
+gax-service:DeploymentRequirementsShape
+  a              sh:NodeShape ;
+  sh:property    [ sh:path     gax-service:hasInitialMemory ;
+                   sh:class    gax-core:Measure] ;
+  sh:property    [ sh:path     gax-service:hasInitialTerminatingMemory ;
+                   sh:class    gax-core:Measure] ;
+  sh:property    [ sh:path     gax-service:hasInitialStorage ;
+                   sh:class    gax-core:Measure] ;
+  sh:property    [ sh:path     gax-service:hasCustomDomainsIncluded ;
+                   sh:datatype xsd:boolean] ;
+  sh:property    [ sh:path     gax-service:hasUploadBandwidth ;
+                   sh:class    gax-core:Measure] ;
+  sh:property    [ sh:path     gax-service:hasDownloadBandwidth ;
+                   sh:class    gax-core:Measure] ;
+  sh:property    [ sh:path     gax-service:hasMinMemory ;
+                   sh:class    gax-core:Measure] ;
+  sh:property    [ sh:path     gax-service:hasMaxMemory ;
+                   sh:class    gax-core:Measure] ;
+  sh:property    [ sh:path     gax-service:hasMinCpuCore ;
+                   sh:datatype xsd:integer] ;
+  sh:property    [ sh:path     gax-service:hasMaxCpuCore ;
+                   sh:datatype xsd:integer] ;
+  sh:property    [ sh:path     gax-service:hasMinStorage ;
+                   sh:class    gax-core:Measure] ;
+  sh:property    [ sh:path     gax-service:hasMaxStorage ;
+                   sh:class    gax-core:Measure] ;
+  sh:property    [ sh:path     gax-service:hasMinDBmembers ;
+                   sh:datatype xsd:integer] ;
+.
+
+gax-service:MaxCapabilitiesShape
+  a              sh:NodeShape ;
+  sh:property    [ sh:path     gax-service:hasMaxMemory ;
+                   sh:class    gax-core:Measure] ;
+  sh:property    [ sh:path     gax-service:hasMaxTerminatingMemory ;
+                   sh:class    gax-core:Measure] ;
+  sh:property    [ sh:path     gax-service:hasMaxStorage ;
+                   sh:class    gax-core:Measure] ;
+  sh:property    [ sh:path     gax-service:maxProjectsSupported ;
+                   sh:datatype xsd:integer] ;
+  sh:property    [ sh:path     gax-service:hasMaxCpuCore ;
+                   sh:datatype xsd:integer] ;
+.
+
+gax-service:DeploymentInstructionsShape
+  a              sh:NodeShape ;
+  sh:property    [ sh:path     gax-service:hasDocumentationUrl ;
+                   sh:datatype xsd:string] ;
+  sh:property    [ sh:path     gax-service:hasDeploymentScriptUrl ;
+                   sh:datatype xsd:string] ;
+  sh:property    [ sh:path     gax-service:hasScriptUrl ;
+                   sh:datatype xsd:string] ;
+  sh:property    [ sh:path     gax-service:hasRepository ;
+                   sh:node     gax-service:RepositoryShape] ;
+.
+
+gax-service:KubernetesVersionsShape
+  a              sh:NodeShape ;
+  sh:property    [ sh:path     gax-service:supported ;
+                   sh:node     gax-service:SupportedVersionsShape] ;
+.
+
+gax-service:SupportedVersionsShape
+  a              sh:NodeShape ;
+  sh:property    [ sh:path     gax-service:hasVersion ;
+                   sh:datatype xsd:string] ;
+.
+
+gax-service:RepositoryShape
+  a              sh:NodeShape ;
+  sh:property    [ sh:path     schema:url ;
+                   sh:datatype xsd:string] ;
+  sh:property    [ sh:path     gax-service:hasAccessRights ;
+                   sh:datatype xsd:string] ;
+  sh:property    [ sh:path     gax-service:hasLogin ;
+                   sh:datatype xsd:string] ;
+  sh:property    [ sh:path     gax-service:hasPassword ;
+                   sh:datatype xsd:string] ;
+.
+
+gax-service:ApiDescriptionShape
+  a              sh:NodeShape ;
+  sh:targetClass gax-service:ApiDescription ;
+  sh:property    [ sh:path     gax-participant:hasName ;
+                   sh:datatype xsd:string] ;
+  sh:property    [ sh:path     gax-service:description ;
+                   sh:datatype xsd:string] ;
+  sh:property    [ sh:path     gax-service:hasContentType ;
+                   sh:datatype xsd:string] ;
+  sh:property    [ sh:path     rdfs:comment ;
+                   sh:datatype xsd:string] ;
+.
+
+gax-service:NodeCountShape
+  a              sh:NodeShape ;
+  sh:property    [ sh:path     qudt:minInclusive ;
+                   sh:datatype xsd:integer ] ;
+  sh:property    [ sh:path     qudt:maxInclusive ;
+                   sh:datatype xsd:integer ] ;
+.
+
+gax-service:ScreenshotShape
+  a              sh:NodeShape ;
+  sh:property    [ sh:path     schema:contentUrl ;
+                   sh:or ( [ sh:datatype xsd:string ] [ sh:nodeKind sh:IRI ] ) ] ;
+  sh:property    [ sh:path     rdfs:comment ;
+                   sh:datatype xsd:string ] ;
+.
